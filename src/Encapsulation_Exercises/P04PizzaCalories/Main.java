@@ -2,39 +2,41 @@ package Encapsulation_Exercises.P04PizzaCalories;
 
 import java.util.Scanner;
 
-public class Main  {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] pizzaInfo = scanner.nextLine().split(" ");
-        String pizzaName = pizzaInfo[1];
-        int numberOfToppings = Integer.parseInt(pizzaInfo[2]);
+        String[] input = scanner.nextLine().split("\\s+");
 
-        String[] doughInfo = scanner.nextLine().split(" ");
-        String flourType = doughInfo[1];
-        String bakingTechnique = doughInfo[2];
-        double weight = Double.parseDouble(doughInfo[3]);
+        String namePizza = input[1];
+        int numToppings = Integer.parseInt(input[2]);
+
         try {
-            Pizza pizza = new Pizza(pizzaName, numberOfToppings);
-            Dough dough = new Dough(flourType, bakingTechnique, weight);
+            Pizza pizza = new Pizza(namePizza, numToppings);
 
-            pizza.setDough(dough);
+            input = scanner.nextLine().split("\\s+");
 
-            String command = scanner.nextLine();
-            while ("END".equals(command)) {
-                String[] toppingInfo = scanner.nextLine().split(" ");
+            String flourType = input[1];
+            String bakingTechnique = input[2];
+            double weight = Double.parseDouble(input[3]);
 
-                String name = toppingInfo[1];
-                double toppingWeight = Double.parseDouble(toppingInfo[2]);
-                Topping topping = new Topping(name, toppingWeight);
-                pizza.addTopping(topping);
+            pizza.setDough(new Dough(flourType, bakingTechnique, weight));
+            input = scanner.nextLine().split("\\s+");
 
-                command = scanner.nextLine();
+            while (!input[0].equals("END")) {
+
+                String toppingType = input[1];
+                double weightTopping = Double.parseDouble(input[2]);
+
+                pizza.addTopping(new Topping(toppingType, weightTopping));
+
+                input = scanner.nextLine().split("\\s+");
             }
-            System.out.printf("%s - %.2f%n", pizza.getName(), pizza.getOverallCalories());
-        }catch (IllegalArgumentException ex){
+
+            System.out.printf("%s - %.2f", pizza.getName(), pizza.getOverallCalories());
+
+        } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
         }
-
     }
 }
